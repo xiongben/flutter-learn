@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
@@ -24,13 +25,15 @@ class PlayVideoState extends State<PlayVideo> {
     final screenWidth = window.physicalSize.width;
     final screenHeight = window.physicalSize.height;
     isPlaying = true;
-    videoPlayerController = VideoPlayerController.network('https://cdn.moji.com/websrc/video/summer20190515.mp4');
+    videoPlayerController = VideoPlayerController.network('http://v.xiaohongshu.com/c42cc40635a4d89107b6d62dfc56abb35bbe35b9?sign=88b58608f948c28bafe67797ff4fb334&t=5d543000');
     chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
       aspectRatio: screenWidth / screenHeight,  //9:16
+      // aspectRatio: 5 / 5,
       autoPlay: true,
       looping: true,
       showControls: false,
+      
     );
     // print("======================");
     // print(chewieController);
@@ -38,16 +41,17 @@ class PlayVideoState extends State<PlayVideo> {
   }
 
   void _handleTapDown(pointerDownEvent) {
-    print(videoPlayerController);
+    print("=============putscreen===============");
     var playingStatus = videoPlayerController.value.isPlaying;
      if(playingStatus == true){
         videoPlayerController.pause();
-        // setState(() {
-        //   isPlaying = false;
-        // });
-     }else{
-       videoPlayerController.play();
+        setState(() {
+          isPlaying = false;
+        });
      }
+    //  else{
+    //    videoPlayerController.play();
+    //  }
      
   }
   
@@ -115,6 +119,33 @@ class PlayVideoState extends State<PlayVideo> {
        );
     }
 
+    Widget videoControlBtn (data) {
+      // var playingStatus = videoPlayerController.value.isPlaying;
+      print('this is play status: ${isPlaying}');
+      if(isPlaying == false){
+        return Container(
+          width: ScreenUtil.getInstance().setWidth(64),
+          height: ScreenUtil.getInstance().setWidth(64),
+          child: GestureDetector(
+            child: prefix0.Image.asset('./images/play.png',
+             width:ScreenUtil.getInstance().setWidth(64),
+             height: ScreenUtil.getInstance().setWidth(64),
+            ),
+            onTap: (){
+              videoPlayerController.play();
+              setState(() {
+                isPlaying = true;
+              });
+            },
+          ),
+        );
+      }
+      return Container(
+        width: 0,
+        height: 0,
+      );
+    }
+
     return Scaffold(
       // appBar: AppBar(
       //   title: Text(widget.title),
@@ -136,6 +167,11 @@ class PlayVideoState extends State<PlayVideo> {
             top: ScreenUtil.getInstance().setWidth(30),
             left: 0,
             child: liveInfo("666"),
+          ),
+          Positioned(
+            top: ScreenUtil.getInstance().setWidth(250),
+            left: ScreenUtil.getInstance().setWidth(155),
+            child: videoControlBtn("666"),
           ),
           Positioned(         //留言输入框
             bottom: ScreenUtil.getInstance().setWidth(12),
